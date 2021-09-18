@@ -3,14 +3,14 @@ import styles from './header.module.scss';
 
 export default function Header() {
   return (
-    <nav className={styles.header}>
-      <div>
+    <header className={styles.header}>
+      <nav>
         <Link href="/">
           <a>
-            <img src="images/logo.svg" alt="logo" />
+            <img src="/images/logo.svg" alt="logo" />
           </a>
         </Link>
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 }
