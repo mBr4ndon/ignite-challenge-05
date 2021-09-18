@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { getPrismicClient } from '../services/prismic';
 import Prismic from '@prismicio/client';
 import { FiUser, FiCalendar } from 'react-icons/fi';
+import { format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
@@ -28,6 +31,32 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps) {
+
+  const [nextPage, setNextPage] = useState(postsPagination.next_page);
+  const [posts, setPosts] = useState<Post[]>(postsPagination.results);
+
+  async function handleLoadPosts() {
+    const { next_page, results } = await (await fetch(postsPagination.next_page)).json();
+    setNextPage(next_page);
+
+    const newPosts: Post[] = results.map(result => {
+      return {
+        uid: result.uid,
+        first_publication_date: result.first_publication_date,
+        data: {
+          title: result.data.title,
+          subtitle: result.data.subtitle,
+          author: result.data.author
+        }
+      }
+    });
+
+    setPosts([
+      ...posts,
+      ...newPosts
+    ]);
+  }
+
   return (
     <>
       <Head>
@@ -44,7 +73,7 @@ export default function Home({ postsPagination }: HomeProps) {
         <section className={styles.posts}>
 
           {
-            postsPagination.results.map(post => (
+            posts.map(post => (
               <Link href={`/post/${post.uid}`} key={post.uid}>
                 <a>
                   <strong>{post.data.title}</strong>
@@ -53,7 +82,13 @@ export default function Home({ postsPagination }: HomeProps) {
                   <div>
                     <div className={styles.info}>
                       <FiCalendar size={20} />
-                      <span>{post.first_publication_date}</span>
+                      <span>
+                        {
+                          format(new Date(post.first_publication_date), 'dd MMM yyyy', {
+                            locale: ptBR
+                          }).toString()
+                        }
+                      </span>
                     </div>
     
                     <div className={styles.info}>
@@ -68,10 +103,11 @@ export default function Home({ postsPagination }: HomeProps) {
 
 
           {
-            postsPagination.next_page !== null && (
+            nextPage !== null && (
               <button 
                 type="button"
                 className={styles.loadPosts}
+                onClick={handleLoadPosts}
               >
                 Carregar mais posts
               </button>
