@@ -37,7 +37,7 @@ interface PostProps {
 
 export default function Post({ post }: PostProps) {
   const router = useRouter();
-  
+
   if (router.isFallback) {
     return <div>Carregando...</div>
   }
@@ -81,7 +81,7 @@ export default function Post({ post }: PostProps) {
 
           <section>
             {post.data.content.map(p => (
-              <div key={p.heading}>
+              <div key={p.heading} className={styles.section}>
                 <h2>{p.heading}</h2>
                 <div dangerouslySetInnerHTML={{__html: RichText.asHtml(p.body)}}/>
               </div>
@@ -142,8 +142,6 @@ export const getStaticProps: GetStaticProps = async context => {
       })
     }
   };
-
-  console.log(post);
 
   return {
     props: { post }

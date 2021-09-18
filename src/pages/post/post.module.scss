@@ -30,4 +30,39 @@
         }
 
     }
+
+    section {
+        margin: 4rem 0;
+
+        .section {
+            margin-bottom: 3.56rem;
+        }
+
+        h2 {
+            margin-bottom: 3.625rem;
+            font-size: 2.25rem;
+        }
+
+        p {
+            color: var(--body);
+            font-size: 1.25rem;
+            line-height: 2rem;
+
+        }
+
+        a {
+            color: var(--highlight);
+        }
+
+        ul {
+            color: var(--body);
+            font-size: 1.25rem;
+            line-height: 2rem;
+
+            li {
+                margin: 1.81rem 0;
+            }
+        }
+
+    }
 }
