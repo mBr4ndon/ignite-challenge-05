@@ -27,7 +27,7 @@ interface HomeProps {
   postsPagination: PostPagination;
 }
 
-export default function Home() {
+export default function Home({ postsPagination }: HomeProps) {
   return (
     <>
       <Head>
@@ -43,50 +43,41 @@ export default function Home() {
         
         <section className={styles.posts}>
 
-          <Link href="">
-            <a>
-              <strong>Como utilizar Hooks</strong>
-              <p>Pensando em sincronização em vez de ciclos de vida.</p>
+          {
+            postsPagination.results.map(post => (
+              <Link href={`/post/${post.uid}`} key={post.uid}>
+                <a>
+                  <strong>{post.data.title}</strong>
+                  <p>{post.data.subtitle}</p>
+    
+                  <div>
+                    <div className={styles.info}>
+                      <FiCalendar size={20} />
+                      <span>{post.first_publication_date}</span>
+                    </div>
+    
+                    <div className={styles.info}>
+                      <FiUser size={20} />
+                      <span>{post.data.author}</span>
+                    </div>              
+                  </div>
+                </a>          
+              </Link>              
+            ))
+          }
 
-              <div>
-                <div className={styles.info}>
-                  <FiCalendar size={20} />
-                  <span>15 Mar 2021</span>
-                </div>
 
-                <div className={styles.info}>
-                  <FiUser size={20} />
-                  <span>Joseph Oliveira</span>
-                </div>              
-              </div>
-            </a>          
-          </Link>
+          {
+            postsPagination.next_page !== null && (
+              <button 
+                type="button"
+                className={styles.loadPosts}
+              >
+                Carregar mais posts
+              </button>
+            )
+          }
 
-          <Link href="">
-            <a>
-              <strong>Criando um app CRA do zero</strong>
-              <p>Tudo sobre como criar a sua primeira aplicaçyarão utilizando Create React App</p>
-
-              <div>
-                <div className={styles.info}>
-                  <FiCalendar size={20} />
-                  <span>19 Abr 2021</span>
-                </div>
-
-                <div className={styles.info}>
-                  <FiUser size={20} />
-                  <span>Danilo Vieira</span>
-                </div>              
-              </div>
-            </a>          
-          </Link>
-
-          <button 
-            type="button"
-            className={styles.loadPosts}
-          >
-            Carregar mais posts
-          </button>
 
         </section>
       </main>
